@@ -1,17 +1,17 @@
 class CircularBuffer {
-    constructor(bufferLength) {
-        this.bufferLength = bufferLength
+    constructor(bufferSize) {
+        this.bufferSize = bufferSize
         this.index = 0
         this.buffer = []
     }
 
     append(value) {
         let poppedValue = null
-        if (this.length === this.bufferLength) {
+        if (this.length === this.bufferSize) {
             poppedValue = this.buffer[this.index]
         }
         this.buffer[this.index] = value
-        this.index = (this.index+1) % this.bufferLength
+        this.index = (this.index+1) % this.bufferSize
 
         return poppedValue
     }
@@ -26,8 +26,8 @@ class CircularBuffer {
 }
 
 class RunningStatsCalculator {
-    constructor(bufferLength) {
-        this.circularBuffer = new CircularBuffer(bufferLength)
+    constructor(bufferSize) {
+        this.circularBuffer = new CircularBuffer(bufferSize)
         this._mean = 0
         this._dSquared = 0
     }
