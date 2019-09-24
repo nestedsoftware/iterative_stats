@@ -39,7 +39,7 @@ class RunningStatsCalculator {
     update(newValue) {
         const poppedValue = this.circularBuffer.append(newValue)
 
-        if (this.count == 1) {
+        if (this.count == 1 && poppedValue == null) {
             // initialize when the first value is added
             this._mean = newValue
             this._dSquared = 0
@@ -161,18 +161,15 @@ const simpleStats = values => {
 }
 
 
-const sourceValues = [1000000,22.2,33.3,44.4,55.5,66.6,77.7,88.8,99.9,100.1]
+const sourceValues = [1000000,22.2,33.3,44.4,55.5,66.6,77.7,88.8,0.0,100.1]
 
-console.log("simple stats...")
 const circularBuffer = new CircularBuffer(5)
-for (const value of sourceValues) {
-    circularBuffer.append(value)
-    console.log(simpleStats(circularBuffer.items()))
-}
-
-console.log("iterative stats...")
 const circularStats = new RunningStatsCalculator(5)
 for (const value of sourceValues) {
+    circularBuffer.append(value)
+    console.log("simple stats", simpleStats(circularBuffer.items()))
+
     circularStats.update(value)
-    console.log(circularStats.summary())
+    console.log("iterative stats", circularStats.summary())
 }
+
