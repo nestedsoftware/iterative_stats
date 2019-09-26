@@ -7,7 +7,7 @@ class CircularBuffer {
 
     append(value) {
         let poppedValue = null
-        if (this.length === this.bufferSize) {
+        if (this.length == this.bufferSize) {
             poppedValue = this.buffer[this.index]
         }
         this.buffer[this.index] = value
@@ -112,16 +112,6 @@ class RunningStatsCalculator {
     }
 }
 
-class StatsError extends Error {
-    constructor(...params) {
-        super(...params)
-
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, StatsError)
-        }
-    }
-}
-
 const sum = values => values.reduce((a,b)=>a+b, 0)
 
 const validate = values =>  {
@@ -160,11 +150,20 @@ const simpleStats = values => {
     }
 }
 
+class StatsError extends Error {
+    constructor(...params) {
+        super(...params)
 
-const sourceValues = [1000000,22.2,33.3,44.4,55.5,66.6,77.7,88.8,0.0,100.1]
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, StatsError)
+        }
+    }
+}
 
 const circularBuffer = new CircularBuffer(5)
 const circularStats = new RunningStatsCalculator(5)
+
+const sourceValues = [1000000,22.2,33.3,44.4,55.5,66.6,77.7,88.8,0.0,100.1]
 for (const value of sourceValues) {
     circularBuffer.append(value)
     console.log("simple stats", simpleStats(circularBuffer.items()))
